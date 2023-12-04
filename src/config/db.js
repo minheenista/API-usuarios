@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const uri = "mongodb+srv://michifus:Youngjae333@web07.nt26l3k.mongodb.net/?retryWrites=true&w=majority&appName=AtlasApp"; //es reomta
+const uri = "mongodb+srv://michifus:Youngjae333@web07.nt26l3k.mongodb.net/?retryWrites=true&w=majority";
 
 mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
