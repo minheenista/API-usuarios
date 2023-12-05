@@ -104,24 +104,17 @@ exports.updateUser = async (req, res) => {
                 mensaje: "Usuario no encontrado",
             });
         } else {
-            if (!name || !lastname || !password) {
-                res.status(400).json({
-                    estado: 0,
-                    mensaje: "Faltan parametros en la solicitud",
-                });
-            } else {
-                const salt = await bcrypt.genSalt(8);
-                await user.updateOne({
-                    name: name,
-                    lastname: lastname,
-                    password: await bcrypt.hash(password, salt),
-                });
-                res.status(200).json({
-                    estado: 1,
-                    mensaje: "Usuario actualizado correctamente",
-                    categoria: user,
-                });
-            }
+            const salt = await bcrypt.genSalt(8);
+            await user.updateOne({
+                name: name,
+                lastname: lastname,
+                password: await bcrypt.hash(password, salt),
+            });
+            res.status(200).json({
+                estado: 1,
+                mensaje: "Usuario actualizado correctamente",
+                categoria: user,
+            });
         }
     } catch (error) {
         console.log(error);
