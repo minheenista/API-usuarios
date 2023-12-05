@@ -94,8 +94,10 @@ exports.updateUser = async (req, res) => {
     const { name } = req.body;
     const { lastname } = req.body;
     const { email } = req.params;
+    const { username } = req.body;
     const { password } = req.body;
     const user = await User.findOne({ email: email });
+    const userRepetido = await User.findOne({ $or: [{ username: username }] });
     console.log(user);
     try {
         if (!user) {
@@ -103,17 +105,23 @@ exports.updateUser = async (req, res) => {
                 estado: 0,
                 mensaje: "Usuario no encontrado",
             });
+        } else if (userRepetido) {
+            res.status(200).json({
+                estado: 0,
+                mensaje: "El usuario y/o correo ya existe, favor de utilizar otro",
+            });
         } else {
             const salt = await bcrypt.genSalt(8);
-            await user.updateOne({
+            userUpdated = await user.updateOne({
                 name: name,
                 lastname: lastname,
+                username: username,
                 password: await bcrypt.hash(password, salt),
             });
             res.status(200).json({
                 estado: 1,
                 mensaje: "Usuario actualizado correctamente",
-                categoria: user,
+                user: user,
             });
         }
     } catch (error) {
